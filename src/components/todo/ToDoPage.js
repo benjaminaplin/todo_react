@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-// import {bindActionCreators} from 'redux';
+import {bindActionCreators} from 'redux';
 import * as todoActions from '../../actions/todoActions';
 // import TodoList from './TodoList';
 // import {browserHistory} from 'react-router';
@@ -24,15 +24,16 @@ class TodosPage extends React.Component {
   }
 
   onClickSave(){
-    this.props.dispatch(todoActions.createTodo(this.state.todo));
+    this.props.actions.createTodo(this.state.todo);
   }
 
   todoRow(todo, index){
-    return <div key={index}>{todo.title}</div>;
+    return (<div key={index}>{todo.title}
+            
+           </div>);
   }
 
   render() {
-    debugger;
     return (
       <div>
         <h1>Todos</h1>
@@ -53,19 +54,24 @@ class TodosPage extends React.Component {
 }
 
 TodosPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  todos: PropTypes.array.isRequired
+  todos: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 //state here represents state in store
 function mapStateToProps(state, ownProps) {
-  debugger;
   return {
     //state.todos property is from reducer
     todos: state.todos
   };
 }
 
+function mapDispatchToProps(dispatch){
+  return {
+    actions: bindActionCreators(todoActions, dispatch)
+  };
+}
+
 //mapDispatchToProps is usually passed here in connect, 
 //can leave off and use .dispatch instead
-export default connect(mapStateToProps)(TodosPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TodosPage);
